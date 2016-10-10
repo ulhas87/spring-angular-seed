@@ -1,6 +1,6 @@
-package nl.ivonet.application;
+package com.app;
 
-import nl.ivonet.controler.HomeControler;
+import com.app.controllers.HelloWorldController;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +29,7 @@ public class SeedApplicationTest {
         assertNotNull(classes);
         assertEquals(2, classes.size());
         assertThat("contains the the JacksonFeature", classes.contains(JacksonFeature.class));
-        assertThat("contains the HomeController", classes.contains(HomeControler.class));
+        assertThat("contains the HelloWorldController", classes.contains(HelloWorldController.class));
     }
 
     @Test

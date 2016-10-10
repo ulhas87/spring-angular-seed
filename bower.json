@@ -3,7 +3,8 @@
   "description": "A starter project for AngularJS and RequireJS combined with java and maven",
   "main": "src/main/webapp/index.html",
   "authors": [
-    "Shruti Shankar"
+    "Shruti Shankar",
+    "Ulhas Pai"
   ],
   "license": "BSD-2-Clause",
   "homepage": "",

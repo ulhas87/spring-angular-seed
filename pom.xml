@@ -8,13 +8,17 @@
 
     <name>wiki-angular-require</name>
 
+    <!-- PROJECT PROPERTIES -->
     <properties>
-        <artifact.name>app</artifact.name>
+        <artifact.name>wiki-angular-require</artifact.name>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <vendor.loc>src/main/webapp/vendor</vendor.loc>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <tomcat.webapp.dir>/mnt/c/applications/tomcat/webapps</tomcat.webapp.dir>
     </properties>
 
+
+    <!-- PROJECT DEPENDENCIES -->
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -33,7 +37,6 @@
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -48,10 +51,10 @@
             <version>2.12</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
 
+    <!-- BUILD CONFIG -->
     <build>
         <finalName>${artifact.name}</finalName>
         <resources>
@@ -60,7 +63,11 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+
+        <!-- PLUGINS TO RUN WHILE BUILDING -->
         <plugins>
+
+            <!-- COMPILE PLUGIN -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -73,14 +80,8 @@
                     </compilerArguments>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                </configuration>
-            </plugin>
+
+            <!-- ENDORSED DEPENDENCY PLUGIN -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -106,6 +107,8 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- JS MINIFY PLUGIN -->
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>yuicompressor-maven-plugin</artifactId>
@@ -133,6 +136,8 @@
                     </excludes>
                 </configuration>
             </plugin>
+
+            <!-- JASMINE TEST RUNNER PLUGIN -->
             <plugin>
                 <groupId>com.github.searls</groupId>
                 <artifactId>jasmine-maven-plugin</artifactId>
@@ -160,6 +165,8 @@
                     </specIncludes>
                 </configuration>
             </plugin>
+
+            <!-- BOWER INSTALL PLUGIN
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -180,20 +187,24 @@
                     <workingDirectory>${basedir}</workingDirectory>
                 </configuration>
             </plugin>
+            -->
+
+            <!-- MAVEN CLEAN PLUGIN TO CLEAN EVERYTHING INCLUDING NODE_MODULES AND BOWER DEPENDENCIES -->
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>2.5</version>
                 <configuration>
                     <filesets>
-                        <fileset>
-                            <directory>src/main/webapp/vendor</directory>
-                        </fileset>
-                        <fileset>
-                            <directory>node_modules</directory>
-                        </fileset>
+                        <!--<fileset>-->
+                            <!--<directory>src/main/webapp/vendor</directory>-->
+                        <!--</fileset>-->
+                        <!--<fileset>-->
+                            <!--<directory>node_modules</directory>-->
+                        <!--</fileset>-->
                     </filesets>
                 </configuration>
             </plugin>
+
             <!--<plugin>-->
             <!--<groupId>org.eclipse.jetty</groupId>-->
             <!--<artifactId>jetty-maven-plugin</artifactId>-->
@@ -205,6 +216,35 @@
             <!--</webApp>-->
             <!--</configuration>-->
             <!--</plugin>-->
+
+            <!-- BUILD WAR FILE PLUGIN -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+
+            <!-- COPY WAR TO TOMCAT -->
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <configuration>
+                            <tasks>
+                                <copy file="target/${project.artifactId}.war" tofile="${tomcat.webapp.dir}/${project.artifactId}.war" />
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 </project>

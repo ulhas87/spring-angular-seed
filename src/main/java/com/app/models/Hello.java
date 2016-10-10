@@ -1,10 +1,12 @@
-package nl.ivonet.model;
+package com.app.models;
 
 /**
- * Simple model class.
- * @author Ivo Woltring
+ * A Hello World Model Class.
+ *
+ * @author Ulhas Pai
  */
 public class Hello {
+
     private final String message;
 
     public Hello(final String world) {

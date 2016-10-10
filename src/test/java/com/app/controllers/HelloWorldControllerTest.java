@@ -1,6 +1,6 @@
-package nl.ivonet.controler;
+package com.app.controllers;
 
-import nl.ivonet.model.Hello;
+import com.app.models.Hello;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,26 +15,26 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
 
-public class HomeControlerTest {
+public class HelloWorldControllerTest {
 
-    private HomeControler controler;
+    private HelloWorldController controller;
 
     @Before
     public void setUp() throws Exception {
-        this.controler = new HomeControler();
+        this.controller = new HelloWorldController();
 
     }
 
     @Test
     public void testGet() throws Exception {
-        final Hello result = this.controler.get();
+        final Hello result = this.controller.get();
         assertNotNull(result);
         assertThat("the result message is world", result.getMessage(), is("world"));
     }
 
     @Test
     public void testGetMethodAnnotations() throws Exception {
-        final Method method = this.controler.getClass()
+        final Method method = this.controller.getClass()
                                             .getMethod("get");
         assertThat("The method has the GET annotation", method.isAnnotationPresent(GET.class));
         assertThat("The method produces JSon", method.isAnnotationPresent(Produces.class));
@@ -45,21 +45,21 @@ public class HomeControlerTest {
 
     @Test
     public void testPathAnnotation() throws Exception {
-        assertNotNull(this.controler.getClass()
+        assertNotNull(this.controller.getClass()
                                     .getAnnotations());
-        assertThat("The controller has the annotation Path", this.controler.getClass()
+        assertThat("The controller has the annotation Path", this.controller.getClass()
                                                                            .isAnnotationPresent(Path.class));
 
-        final Path path = this.controler.getClass()
+        final Path path = this.controller.getClass()
                                         .getAnnotation(Path.class);
         assertThat("The path is /home", path.value(), is("/home"));
     }
 
     @Test
     public void testScope() throws Exception {
-        assertNotNull(this.controler.getClass()
+        assertNotNull(this.controller.getClass()
                                     .getAnnotations());
-        assertThat("The controller has the annotation RequestScoped", this.controler.getClass()
+        assertThat("The controller has the annotation RequestScoped", this.controller.getClass()
                                                                                     .isAnnotationPresent(
                                                                                             RequestScoped.class));
     }
