@@ -4,7 +4,7 @@ controllers.controller("HomeController", ['$scope', '$http', function ($scope, $
     $scope.debug = false;
     $scope.title = 'Hello ';
 
-    $http.get("service/home").success(function (data) {
+    $http.get("hello").success(function (data) {
         $scope.data = data;
         $scope.title += $scope.data.message;
     });

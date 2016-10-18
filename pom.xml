@@ -1,16 +1,16 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <name>spring-angular-seed</name>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.shruti</groupId>
-    <artifactId>wiki-angular-require</artifactId>
+    <artifactId>${artifact.name}</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
 
-    <name>wiki-angular-require</name>
-
     <!-- PROJECT PROPERTIES -->
     <properties>
-        <artifact.name>wiki-angular-require</artifact.name>
+        <artifact.name>spring-angular-seed</artifact.name>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <vendor.loc>src/main/webapp/vendor</vendor.loc>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -78,6 +78,7 @@
     <build>
         <finalName>${artifact.name}</finalName>
 
+        <!-- MARKING THE JAVASCRIPT FOLDER AS RESOURCES -->
         <resources>
             <resource>
                 <directory>src/main/javascript</directory>
@@ -88,7 +89,7 @@
         <!-- PLUGINS TO RUN WHILE BUILDING -->
         <plugins>
 
-            <!-- MAVEN SPRING BOOT PLUGIN-->
+            <!-- MAVEN SPRING BOOT PLUGIN: USED TO BUILD THE ARTIFACTS CORRECTLY -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -109,7 +110,7 @@
                 </configuration>
             </plugin>
 
-            <!-- JS MINIFY PLUGIN -->
+            <!-- JS MINIFY PLUGIN: YOU CAN USE ANYTHING ELSE TOO -->
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>yuicompressor-maven-plugin</artifactId>
@@ -126,7 +127,6 @@
                 </executions>
                 <configuration>
                     <failOnWarning>true</failOnWarning>
-                    <!--<outputDirectory>src/main/webapp/js</outputDirectory>-->
                     <outputDirectory>target/${artifact.name}/js</outputDirectory>
                     <nosuffix>true</nosuffix>
                     <excludes>
