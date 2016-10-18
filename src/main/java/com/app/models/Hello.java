@@ -1,11 +1,13 @@
 package com.app.models;
 
+import java.io.Serializable;
+
 /**
  * A Hello World Model Class.
  *
  * @author Ulhas Pai
  */
-public class Hello {
+public class Hello implements Serializable {
 
     private final String message;
 

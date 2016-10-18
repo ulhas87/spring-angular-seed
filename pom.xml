@@ -15,48 +15,69 @@
         <vendor.loc>src/main/webapp/vendor</vendor.loc>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <tomcat.webapp.dir>/mnt/c/applications/tomcat/webapps</tomcat.webapp.dir>
+
+        <springboot.version>1.4.1.RELEASE</springboot.version>
+        <jackson.version>2.8.3</jackson.version>
+        <javax.version>3.1.0</javax.version>
+        <mockito.version>2.1.0</mockito.version>
+        <junit.version>4.12</junit.version>
     </properties>
 
 
     <!-- PROJECT DEPENDENCIES -->
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${springboot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <version>${springboot.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${javax.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.9.5</version>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-jaxb-annotations</artifactId>
-            <version>2.4.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-json-jackson</artifactId>
-            <version>2.12</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 
     <!-- BUILD CONFIG -->
     <build>
         <finalName>${artifact.name}</finalName>
+
         <resources>
             <resource>
                 <directory>src/main/javascript</directory>
@@ -66,6 +87,13 @@
 
         <!-- PLUGINS TO RUN WHILE BUILDING -->
         <plugins>
+
+            <!-- MAVEN SPRING BOOT PLUGIN-->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${springboot.version}</version>
+            </plugin>
 
             <!-- COMPILE PLUGIN -->
             <plugin>
@@ -79,33 +107,6 @@
                         <endorseddirs>${endorsed.dir}</endorseddirs>
                     </compilerArguments>
                 </configuration>
-            </plugin>
-
-            <!-- ENDORSED DEPENDENCY PLUGIN -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${endorsed.dir}</outputDirectory>
-                            <silent>true</silent>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>javax</groupId>
-                                    <artifactId>javaee-endorsed-api</artifactId>
-                                    <version>7.0</version>
-                                    <type>jar</type>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
 
             <!-- JS MINIFY PLUGIN -->
@@ -205,18 +206,6 @@
                 </configuration>
             </plugin>
 
-            <!--<plugin>-->
-            <!--<groupId>org.eclipse.jetty</groupId>-->
-            <!--<artifactId>jetty-maven-plugin</artifactId>-->
-            <!--<version>9.2.2.v20140723</version>-->
-            <!--<configuration>-->
-            <!--<scanIntervalSeconds>10</scanIntervalSeconds>-->
-            <!--<webApp>-->
-            <!--<contextPath>/${artifact.name}</contextPath>-->
-            <!--</webApp>-->
-            <!--</configuration>-->
-            <!--</plugin>-->
-
             <!-- BUILD WAR FILE PLUGIN -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -227,11 +216,25 @@
                 </configuration>
             </plugin>
 
-            <!-- COPY WAR TO TOMCAT -->
+            <!-- ANT TASKS -->
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>delete-artifacts</id>
+                        <phase>pre-clean</phase>
+                        <configuration>
+                            <tasks>
+                                <delete file="${tomcat.webapp.dir}/${project.artifactId}.war" />
+                                <delete dir="${tomcat.webapp.dir}/${project.artifactId}" />
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>copy-artifacts</id>
                         <phase>package</phase>
                         <configuration>
                             <tasks>
